@@ -1,9 +1,11 @@
 ﻿using MagicVilla.Datos;
+using MagicVilla.Modelos;
 using MagicVilla.Modelos.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace MagicVilla.Controllers
 {
@@ -12,16 +14,19 @@ namespace MagicVilla.Controllers
     public class VillaController : ControllerBase
     {
         private readonly ILogger<VillaController> logger;
-        public VillaController(ILogger<VillaController> logger)
+        private readonly ApplicationDbContext context;
+
+        public VillaController(ILogger<VillaController> logger, ApplicationDbContext context)
         {
             this.logger = logger;
+            this.context = context;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<VillaDTOs>> GetVilla()
         {
             logger.LogInformation("Obtener Villas");
-            return Ok(VillaStore.villaList);
+            return Ok(context.Villas.ToList());
         }
 
         [HttpGet("{id:int}", Name = "GetVilla")]
@@ -36,7 +41,8 @@ namespace MagicVilla.Controllers
                 return BadRequest();
             }
 
-            var villa = VillaStore.villaList.FirstOrDefault(x => x.Id == id);
+            //var villa = VillaStore.villaList.FirstOrDefault(x => x.Id == id);
+            var villa = context.Villas.FirstOrDefault(x => x.Id == id);
 
             if ( villa == null ) 
             {
@@ -58,10 +64,10 @@ namespace MagicVilla.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (VillaStore.villaList.FirstOrDefault(x => x.Nombre.ToLower() == villaDto.Nombre.ToLower()) != null)
+            if (context.Villas.FirstOrDefault(x => x.Nombre.ToLower() == villaDto.Nombre.ToLower()) != null)
             {
                 ModelState.AddModelError("NombreExiste", "La Villa con ese nombre ya existe!");
-                return BadRequest(ModelState);  
+                return BadRequest(ModelState);
             }
 
             if (villaDto == null)
@@ -73,10 +79,20 @@ namespace MagicVilla.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            villaDto.Id = VillaStore.villaList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
-            VillaStore.villaList.Add(villaDto);
+            Villa modelo = new()
+            {
+                Nombre = villaDto.Nombre,
+                Detalle = villaDto.Detalle,
+                ImagenUrl = villaDto.ImagenUrl,
+                Ocupantes = villaDto.Ocupantes,
+                Tarifa = villaDto.Tarifa,
+                MetrosCuadrados = villaDto.MetrosCuadrados,
+                Amenidad = villaDto.Amenidad
+            };
 
-            //return Ok(villaDto);
+            context.Villas.Add(modelo);
+            context.SaveChanges();
+
             return CreatedAtRoute("GetVilla", new { id = villaDto.Id }, villaDto);
         }
 
@@ -91,30 +107,42 @@ namespace MagicVilla.Controllers
                 return BadRequest();
             }
 
-            var villa = VillaStore.villaList.FirstOrDefault(x => x.Id == id);
+            var villa = context.Villas.FirstOrDefault(x => x.Id == id);
 
             if (villa == null)
             {
                 return NotFound();
             }
 
-            VillaStore.villaList.Remove(villa);
+            context.Villas.Remove(villa);
+            context.SaveChanges();
+
             return NoContent();
         }
 
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateVilla(int id, [FromBody] VillaDTOs villaDTO)
+        public IActionResult UpdateVilla(int id, [FromBody] VillaDTOs villaDto)
         {
-            if (villaDTO == null || id != villaDTO.Id)
+            if (villaDto == null || id != villaDto.Id)
             {
                 return BadRequest();
             }
-            var villa = VillaStore.villaList.FirstOrDefault(x => x.Id == id);
-            villa.Nombre = villaDTO.Nombre;
-            villa.Ocupantes = villaDTO.Ocupantes;
-            villa.MetrosCuadrados = villaDTO.MetrosCuadrados;
+            Villa modelo = new()
+            {
+                Id = villaDto.Id,
+                Nombre = villaDto.Nombre,
+                Detalle = villaDto.Detalle,
+                ImagenUrl = villaDto.ImagenUrl,
+                Ocupantes = villaDto.Ocupantes,
+                Tarifa = villaDto.Tarifa,
+                MetrosCuadrados = villaDto.MetrosCuadrados,
+                Amenidad = villaDto.Amenidad
+            };
+
+            context.Villas.Update(modelo);
+            context.SaveChanges();
 
             return NoContent();
         }
@@ -128,14 +156,46 @@ namespace MagicVilla.Controllers
             {
                 return BadRequest();
             }
-            var villa = VillaStore.villaList.FirstOrDefault(x => x.Id == id);
+            var villa = context.Villas.AsNoTracking().FirstOrDefault(x => x.Id == id);
 
-            patchDto.ApplyTo(villa, ModelState);
+            VillaDTOs villaDto = new()
+            {
+                Id = villa.Id,
+                Nombre = villa.Nombre,
+                Detalle = villa.Detalle,
+                ImagenUrl = villa.ImagenUrl,
+                Ocupantes = villa.Ocupantes,
+                Tarifa = villa.Tarifa,
+                MetrosCuadrados = villa.MetrosCuadrados,
+                Amenidad = villa.Amenidad
+            };
+
+            if (villa == null)
+            {
+                return BadRequest();
+            }
+
+            patchDto.ApplyTo(villaDto, ModelState);
 
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
+
+            Villa modelo = new()
+            {
+                Id = villaDto.Id,
+                Nombre = villaDto.Nombre,
+                Detalle = villaDto.Detalle,
+                ImagenUrl = villaDto.ImagenUrl,
+                Ocupantes = villaDto.Ocupantes,
+                Tarifa = villaDto.Tarifa,
+                MetrosCuadrados = villaDto.MetrosCuadrados,
+                Amenidad = villaDto.Amenidad
+            };
+
+            context.Villas.Update(modelo);
+            context.SaveChanges();
 
             return NoContent();
         }
