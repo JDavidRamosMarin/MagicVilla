@@ -38,7 +38,7 @@ namespace MagicVilla.Controllers
             try
             {
                 _logger.LogInformation("Obtener Numero Villas");
-                IEnumerable<NumeroVilla> numeroVillaList = await _numeroRepo.ObtenerTodos();
+                IEnumerable<NumeroVilla> numeroVillaList = await _numeroRepo.ObtenerTodos(incluirPropiedad: "Villa");
                 _response.Resultado = mapper.Map<IEnumerable<NumeroVillaDto>>(numeroVillaList);
                 _response.statusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -68,7 +68,7 @@ namespace MagicVilla.Controllers
                 }
 
                 //var villa = VillaStore.villaList.FirstOrDefault(x => x.Id == id);
-                var numeroVilla = await _numeroRepo.Obtener(x => x.VillaNo == id);
+                var numeroVilla = await _numeroRepo.Obtener(x => x.VillaNo == id, incluirPropiedad: "Villa");
 
                 if (numeroVilla == null)
                 {
@@ -104,13 +104,13 @@ namespace MagicVilla.Controllers
 
                 if (await _numeroRepo.Obtener(x => x.VillaNo == createDto.VillaNo) != null)
                 {
-                    ModelState.AddModelError("NombreExiste", "El número de Villa ya existe!");
+                    ModelState.AddModelError("ErrorMessages", "El número de Villa ya existe!");
                     return BadRequest(ModelState);
                 }
 
                 if (await _villaRepo.Obtener(x => x.Id == createDto.VillaId) == null)
                 {
-                    ModelState.AddModelError("ClaveForanea", "El Id de la villa no existe!");
+                    ModelState.AddModelError("ErrorMessages", "El Id de la villa no existe!");
                     return BadRequest(ModelState);
                 }
 
@@ -190,7 +190,7 @@ namespace MagicVilla.Controllers
 
                 if (await _villaRepo.Obtener(x => x.Id == villaUpdateDto.VillaId) == null)
                 {
-                    ModelState.AddModelError("ClaveForanea", "El Id de la villa no existe!");
+                    ModelState.AddModelError("ErrorMessages", "El Id de la villa no existe!");
                     return BadRequest(ModelState);
                 }
 
