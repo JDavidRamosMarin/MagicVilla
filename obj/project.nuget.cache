@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "TuBjUv1XAvRZWl8YGl5D3uCEz1vfTWKSjOtE2F6fF9gIWa7l462lc/OYckNYYEyAdKZwoMWAf2MOQfgvFLIC+A==",
+  "dgSpecHash": "kX8QJWTxMRgWuPw57qqtitNpUUn4SU1nt9PqSpmon4vdJzqzZEyriSn2+sxmIaDtTmktUFNyI+I5NKjqWkQe+Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\Documents\\CAMINO DEV\\MATERIAL CURSO C#\\YOUTUE\\BAEZSTONE CREATORS (API)\\MagicVilla\\MagicVilla.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "C:\\Users\\HP\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.25\\microsoft.aspnetcore.authentication.jwtbearer.6.0.25.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\7.0.12\\microsoft.aspnetcore.jsonpatch.7.0.12.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\6.0.23\\microsoft.aspnetcore.mvc.newtonsoftjson.6.0.23.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",

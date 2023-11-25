@@ -91,3 +91,4 @@ C:\Users\HP\Documents\CAMINO DEV\MATERIAL CURSO C#\YOUTUE\BAEZSTONE CREATORS (AP
 C:\Users\HP\Documents\CAMINO DEV\MATERIAL CURSO C#\YOUTUE\BAEZSTONE CREATORS (API)\MagicVilla\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\HP\Documents\CAMINO DEV\MATERIAL CURSO C#\YOUTUE\BAEZSTONE CREATORS (API)\MagicVilla\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\HP\Documents\CAMINO DEV\MATERIAL CURSO C#\YOUTUE\BAEZSTONE CREATORS (API)\MagicVilla\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\HP\Documents\CAMINO DEV\MATERIAL CURSO C#\YOUTUE\BAEZSTONE CREATORS (API)\MagicVilla\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
